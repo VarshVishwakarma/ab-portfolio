@@ -1,0 +1,176 @@
+/* =========================
+   WHAT I DO (LEFT ELITE UI)
+   ========================= */
+
+.whatIDO {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  z-index: 10;
+  
+  /* Prevent the section background from blocking the 3D canvas */
+  background: transparent;
+  
+  /* Let clicks/scrolls pass through the invisible section wrapper to the 3D canvas */
+  pointer-events: none; 
+}
+
+/* CONTENT WRAPPER */
+.what-content-left {
+  /* Absolute positioning to keep it strictly on the left and vertically centered */
+  position: absolute;
+  top: 50%;
+  left: 80px;
+  transform: translateY(-50%);
+  
+  max-width: 500px;
+  
+  /* Restore pointer events so hover effects and clicks work on the text */
+  pointer-events: auto; 
+}
+
+/* TITLE */
+.what-title {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 50px;
+
+  color: #ffffff;
+  position: relative;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ACCENT LINE */
+.what-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -15px;
+
+  width: 60px;
+  height: 3px;
+
+  background: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+/* LIST */
+.what-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ITEM */
+.what-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  font-size: 20px;
+  font-weight: 300;
+  color: #94a3b8; /* Slate 400 for clean contrast before hover */
+
+  cursor: default;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* GLOW DOT (COOL EFFECT) */
+.what-item::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #38bdf8;
+  border-radius: 50%;
+  
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* NUMBER */
+.what-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: #38bdf8;
+  opacity: 0.5;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+/* TEXT */
+.what-text {
+  position: relative;
+  letter-spacing: 1px;
+}
+
+/* HOVER EFFECTS */
+.what-item:hover {
+  transform: translateX(15px);
+  color: #ffffff; /* Text becomes brighter */
+}
+
+.what-item:hover .what-number {
+  opacity: 1;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+}
+
+.what-item:hover::before {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1200px) {
+  .what-content-left {
+    left: 60px;
+  }
+}
+
+@media (max-width: 900px) {
+  .whatIDO {
+    /* Mobile: remove absolute styling and stack normally */
+    display: flex;
+    align-items: center;
+    min-height: auto;
+    padding: 120px 40px;
+    pointer-events: auto; /* Restore normal stacking clicks */
+  }
+
+  .what-content-left {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    max-width: 100%;
+  }
+
+  .what-title {
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+
+  .what-item {
+    font-size: 18px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .whatIDO {
+    padding: 100px 20px;
+  }
+
+  .what-title {
+    font-size: 28px;
+  }
+
+  .what-item {
+    font-size: 16px;
+  }
+}
