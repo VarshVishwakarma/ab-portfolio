@@ -33,16 +33,47 @@
   color: #e6f7ff;
 }
 
-/* Tablet */
+/* =========================================
+   MOBILE FIX: Glassmorphism Shield (Phones)
+   ========================================= */
+@media only screen and (max-width: 767px) {
+  .about-section {
+    z-index: 10;
+    margin-top: 10vh; /* Pushes the section down slightly from the top */
+  }
 
+  .about-me {
+    background: rgba(15, 15, 15, 0.65); /* Premium dark glass */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+    padding: 30px 20px; /* Internal breathing room */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Subtle edge reflection */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); /* Deep shadow */
+    position: relative;
+    z-index: 20;
+  }
+
+  /* Make sure text fits inside the mobile box beautifully */
+  .about-me p {
+    font-size: 20px; 
+    line-height: 30px;
+    margin-top: 20px;
+  }
+}
+
+/* =========================================
+   Tablet
+   ========================================= */
 @media only screen and (min-width: 600px) {
   .about-section {
     justify-content: center;
   }
 }
 
-/* Small desktop */
-
+/* =========================================
+   Small desktop
+   ========================================= */
 @media only screen and (min-width: 768px) {
   .about-me {
     width: 500px;
@@ -55,8 +86,9 @@
   }
 }
 
-/* Desktop */
-
+/* =========================================
+   Desktop
+   ========================================= */
 @media only screen and (min-width: 1025px) {
   .about-section {
     width: var(--cWidth);
@@ -78,8 +110,9 @@
   }
 }
 
-/* Large screens */
-
+/* =========================================
+   Large screens
+   ========================================= */
 @media only screen and (min-width: 1950px) {
   .about-me p {
     font-size: 2.5rem;
