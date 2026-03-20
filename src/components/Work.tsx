@@ -1,4 +1,4 @@
-import "./styles/work.css";
+import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
