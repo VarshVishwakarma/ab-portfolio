@@ -1,3 +1,4 @@
+import "./styles/Work.css";
 import { useEffect, useRef } from "react";
 
 const Work = () => {
@@ -38,7 +39,7 @@ const Work = () => {
   ];
 
   /* =========================
-     GSAP SCROLL
+     ⚡ GSAP SCROLL (SAFE LOAD)
      ========================= */
   useEffect(() => {
     const initAnimation = () => {
@@ -50,20 +51,17 @@ const Work = () => {
 
       let translateX = 0;
 
-      function setTranslateX() {
+      const setTranslateX = () => {
         const flexContainer = flexRef.current;
         if (!flexContainer) return;
 
         const offsetLeft = flexContainer.getBoundingClientRect().left;
-        
-        // Calculate the total distance needed to scroll to the end of the flex container.
-        // We take the full scrollable width, subtract the viewport width, 
-        // add the initial left offset, and add a little extra padding (60px) for the end.
-        translateX = flexContainer.scrollWidth - window.innerWidth + offsetLeft + 60;
-        
-        // Failsafe to ensure it doesn't scroll backwards if the screen is massive
+
+        translateX =
+          flexContainer.scrollWidth - window.innerWidth + offsetLeft + 60;
+
         if (translateX < 0) translateX = 0;
-      }
+      };
 
       setTranslateX();
 
@@ -74,7 +72,7 @@ const Work = () => {
           end: `+=${translateX}`,
           scrub: true,
           pin: true,
-          id: "work",
+          id: "projects",
         },
       });
 
@@ -84,13 +82,15 @@ const Work = () => {
       });
     };
 
-    // Dynamically load GSAP so it bypasses bundler resolution errors
+    // Dynamic GSAP load (fixes Vercel issues)
     if (!(window as any).gsap) {
       const script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
+      script.src =
+        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
       script.onload = () => {
         const stScript = document.createElement("script");
-        stScript.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
+        stScript.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
         stScript.onload = initAnimation;
         document.head.appendChild(stScript);
       };
@@ -101,98 +101,39 @@ const Work = () => {
 
     return () => {
       const ScrollTrigger = (window as any).ScrollTrigger;
-      if (ScrollTrigger) {
-        ScrollTrigger.getById("work")?.kill();
-      }
+      ScrollTrigger?.getById("projects")?.kill();
     };
   }, []);
 
   /* =========================
-     SLIDER BUTTONS
+     🎯 SLIDER CONTROLS
      ========================= */
   const nextSlide = () => {
-    // Calculates the approximate width of one card + the gap (2rem = 32px)
-    const scrollAmount = (window.innerWidth * 0.8) + 32;
-    window.scrollBy({
-      top: scrollAmount,
-      behavior: "smooth",
-    });
+    const scrollAmount = window.innerWidth * 0.8 + 32;
+    window.scrollBy({ top: scrollAmount, behavior: "smooth" });
   };
 
   const prevSlide = () => {
-    const scrollAmount = (window.innerWidth * 0.8) + 32;
-    window.scrollBy({
-      top: -scrollAmount,
-      behavior: "smooth",
-    });
+    const scrollAmount = window.innerWidth * 0.8 + 32;
+    window.scrollBy({ top: -scrollAmount, behavior: "smooth" });
   };
 
   /* =========================
      UI
      ========================= */
   return (
-    <div className="work-section" id="work">
-      <style>{`
-        .work-section { overflow: hidden; background: #111; color: #fff; padding: 50px 0; min-height: 100vh; font-family: sans-serif; }
-        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .work-flex { display: flex; flex-wrap: nowrap; width: max-content; gap: 2rem; padding: 2rem 0; }
-        .work-box { width: 80vw; max-width: 500px; background: #222; padding: 2rem; border-radius: 12px; transition: transform 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .work-box:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.1); }
-        
-        .work-slider-controls { margin-top: 1.5rem; display: flex; gap: 1rem; }
-        .slider-btn { 
-          background: rgba(255, 255, 255, 0.05); 
-          color: #fff; 
-          border: 1px solid rgba(255, 255, 255, 0.1); 
-          width: 48px;
-          height: 48px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer; 
-          border-radius: 50%; 
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          backdrop-filter: blur(10px);
-        }
-        .slider-btn:hover { 
-          background: rgba(255, 255, 255, 0.15); 
-          border-color: rgba(255, 255, 255, 0.3);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-        .slider-btn:active {
-          transform: translateY(0) scale(0.95);
-        }
-        .slider-btn svg {
-          width: 20px;
-          height: 20px;
-          stroke: currentColor;
-          stroke-width: 2;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          fill: none;
-        }
-
-        .project-link { color: #4facfe; text-decoration: none; font-weight: bold; transition: color 0.2s; }
-        .project-link:hover { color: #00f2fe; text-decoration: underline; }
-        h2 { font-size: 2.5rem; margin-bottom: 0; }
-        h3 { color: #555; font-size: 3rem; margin: 0 0 1rem 0; font-weight: 800; letter-spacing: -2px; }
-        h4 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.2rem; }
-        p { color: #aaa; line-height: 1.6; }
-      `}</style>
+    <div className="work-section" id="projects">
       <div className="work-container section-container">
-        <h2>Projects</h2>
+        <h2>
+          My <span>Projects</span>
+        </h2>
 
         <div className="work-slider-controls">
-          <button className="slider-btn" onClick={prevSlide} aria-label="Previous Project">
-            <svg viewBox="0 0 24 24">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+          <button onClick={prevSlide} className="slider-btn">
+            ‹
           </button>
-          <button className="slider-btn" onClick={nextSlide} aria-label="Next Project">
-            <svg viewBox="0 0 24 24">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
+          <button onClick={nextSlide} className="slider-btn">
+            ›
           </button>
         </div>
 
@@ -204,27 +145,25 @@ const Work = () => {
                   <h3>{String(index + 1).padStart(2, "0")}</h3>
 
                   <div>
-                    <h4 style={{ color: "#fff" }}>{project.title}</h4>
-                    <p style={{ fontSize: "0.9rem", color: "#4facfe" }}>
+                    <h4>{project.title}</h4>
+
+                    <p className="tech-stack">
                       {project.tech.join(" • ")}
-                    </p> 
+                    </p>
                   </div>
                 </div>
 
-                <h4 style={{ marginTop: "1.5rem", color: "#ddd" }}>Overview</h4>
+                <h4>Overview</h4>
                 <p>{project.description}</p>
 
+                {/* 🔥 GitHub CTA */}
                 <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="project-link"
-                  style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: "1.5rem" }}
                 >
-                  View on GitHub 
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
+                  View on GitHub →
                 </a>
               </div>
             </div>
