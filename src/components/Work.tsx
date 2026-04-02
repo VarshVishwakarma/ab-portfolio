@@ -4,9 +4,6 @@ import { useEffect, useRef } from "react";
 const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
-  /* =========================
-     🔥 REAL PROJECT DATA
-     ========================= */
   const projects = [
     {
       title: "SyntexHub Encrypted Chat App",
@@ -20,7 +17,8 @@ const Work = () => {
       description:
         "Secure file transfer with encryption and protected storage mechanism.",
       tech: ["Python", "Encryption", "File Handling"],
-      github: "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
+      github:
+        "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
     },
     {
       title: "Bug Bounty Toolkit",
@@ -38,10 +36,9 @@ const Work = () => {
     },
   ];
 
-  /* =========================
-     ⚡ GSAP SCROLL (SAFE LOAD)
-     ========================= */
   useEffect(() => {
+    let ctx: any;
+
     const initAnimation = () => {
       const gsap = (window as any).gsap;
       const ScrollTrigger = (window as any).ScrollTrigger;
@@ -49,42 +46,33 @@ const Work = () => {
 
       gsap.registerPlugin(ScrollTrigger);
 
-      let translateX = 0;
+      ctx = gsap.context(() => {
+        const flexContainer = flexRef.current;
+        if (!flexContainer) return;
 
-      const setTranslateX = () => {
-  const flexContainer = flexRef.current;
-  if (!flexContainer) return;
+        const getScrollAmount = () =>
+          flexContainer.scrollWidth - window.innerWidth;
 
-  // Total scrollable width minus viewport
-  translateX = flexContainer.scrollWidth - window.innerWidth;
+        gsap.to(".work-flex", {
+          x: () => -getScrollAmount(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".work-section",
+            start: "top top",
+            end: () => `+=${getScrollAmount()}`,
+            scrub: true,
+            pin: true,
+            invalidateOnRefresh: true,
+          },
+        });
 
-  // Add extra buffer so last cards fully appear
-  translateX += 100;
-
-  // Safety check
-  if (translateX < 0) translateX = 0;
-};
-
-      setTranslateX();
-
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top top",
-          end: `+=${translateX}`,
-          scrub: true,
-          pin: true,
-          id: "projects",
-        },
-      });
-
-      timeline.to(".work-flex", {
-        x: -translateX,
-        ease: "none",
+        // Force refresh after layout stabilizes
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 300);
       });
     };
 
-    // Dynamic GSAP load (fixes Vercel issues)
     if (!(window as any).gsap) {
       const script = document.createElement("script");
       script.src =
@@ -102,14 +90,10 @@ const Work = () => {
     }
 
     return () => {
-      const ScrollTrigger = (window as any).ScrollTrigger;
-      ScrollTrigger?.getById("projects")?.kill();
+      ctx?.revert();
     };
   }, []);
 
-  /* =========================
-     🎯 SLIDER CONTROLS
-     ========================= */
   const nextSlide = () => {
     const scrollAmount = window.innerWidth * 0.8 + 32;
     window.scrollBy({ top: scrollAmount, behavior: "smooth" });
@@ -120,9 +104,6 @@ const Work = () => {
     window.scrollBy({ top: -scrollAmount, behavior: "smooth" });
   };
 
-  /* =========================
-     UI
-     ========================= */
   return (
     <div className="work-section" id="projects">
       <div className="work-container section-container">
@@ -158,7 +139,6 @@ const Work = () => {
                 <h4>Overview</h4>
                 <p>{project.description}</p>
 
-                {/* 🔥 GitHub CTA */}
                 <a
                   href={project.github}
                   target="_blank"
