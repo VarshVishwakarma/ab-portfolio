@@ -51,19 +51,18 @@ const Work = () => {
       let translateX = 0;
 
       function setTranslateX() {
-        const box = document.getElementsByClassName("work-box");
+        const flexContainer = flexRef.current;
+        if (!flexContainer) return;
 
-        if (!box.length) return;
-
-        const workContainer = document.querySelector(".work-container");
-        if (!workContainer) return;
-
-        const rectLeft = workContainer.getBoundingClientRect().left;
-        const rect = box[0].getBoundingClientRect();
-        const parentWidth = box[0].parentElement!.getBoundingClientRect().width;
-        const padding = parseInt(window.getComputedStyle(box[0]).padding || "0") / 2;
-
-        translateX = rect.width * box.length - (rectLeft + parentWidth) + padding;
+        const offsetLeft = flexContainer.getBoundingClientRect().left;
+        
+        // Calculate the total distance needed to scroll to the end of the flex container.
+        // We take the full scrollable width, subtract the viewport width, 
+        // add the initial left offset, and add a little extra padding (60px) for the end.
+        translateX = flexContainer.scrollWidth - window.innerWidth + offsetLeft + 60;
+        
+        // Failsafe to ensure it doesn't scroll backwards if the screen is massive
+        if (translateX < 0) translateX = 0;
       }
 
       setTranslateX();
