@@ -52,16 +52,18 @@ const Work = () => {
       let translateX = 0;
 
       const setTranslateX = () => {
-        const flexContainer = flexRef.current;
-        if (!flexContainer) return;
+  const flexContainer = flexRef.current;
+  if (!flexContainer) return;
 
-        const offsetLeft = flexContainer.getBoundingClientRect().left;
+  // Total scrollable width minus viewport
+  translateX = flexContainer.scrollWidth - window.innerWidth;
 
-        translateX =
-          flexContainer.scrollWidth - window.innerWidth + offsetLeft + 60;
+  // Add extra buffer so last cards fully appear
+  translateX += 100;
 
-        if (translateX < 0) translateX = 0;
-      };
+  // Safety check
+  if (translateX < 0) translateX = 0;
+};
 
       setTranslateX();
 
