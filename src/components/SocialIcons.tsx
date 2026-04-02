@@ -9,10 +9,10 @@ const TbNotes = () => <svg stroke="currentColor" fill="none" strokeWidth="2" vie
 const HoverLinks = ({ text }: { text: string }) => <span>{text}</span>;
 
 // NOTE: When copying back to your local IDE, replace the lines above this comment with your original imports:
-// import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa6";
-// import "./styles/SocialIcons.css";
-// import { TbNotes } from "react-icons/tb";
-// import HoverLinks from "./HoverLinks";
+import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa6";
+import "./styles/SocialIcons.css";
+import { TbNotes } from "react-icons/tb";
+import HoverLinks from "./HoverLinks";
 
 
 const SocialIcons = () => {
