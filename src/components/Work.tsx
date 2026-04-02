@@ -1,13 +1,6 @@
-import "./styles/Work.css";
-import WorkImage from "./WorkImage";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
-
   const flexRef = useRef<HTMLDivElement>(null);
 
   /* =========================
@@ -48,56 +41,71 @@ const Work = () => {
      GSAP SCROLL
      ========================= */
   useEffect(() => {
+    const initAnimation = () => {
+      const gsap = (window as any).gsap;
+      const ScrollTrigger = (window as any).ScrollTrigger;
+      if (!gsap || !ScrollTrigger) return;
 
-    let translateX = 0;
+      gsap.registerPlugin(ScrollTrigger);
 
-    function setTranslateX() {
-      const box = document.getElementsByClassName("work-box");
+      let translateX = 0;
 
-      if (!box.length) return;
+      function setTranslateX() {
+        const box = document.getElementsByClassName("work-box");
 
-      const container = document.querySelector(".work-container");
-      if (!container) return;
+        if (!box.length) return;
 
-      const rectLeft = container.getBoundingClientRect().left;
+        const workContainer = document.querySelector(".work-container");
+        if (!workContainer) return;
 
-      const rect = box[0].getBoundingClientRect();
-      const parentElement = box[0].parentElement;
+        const rectLeft = workContainer.getBoundingClientRect().left;
+        const rect = box[0].getBoundingClientRect();
+        const parentWidth = box[0].parentElement!.getBoundingClientRect().width;
+        const padding = parseInt(window.getComputedStyle(box[0]).padding || "0") / 2;
 
-      if (!parentElement) return;
+        translateX = rect.width * box.length - (rectLeft + parentWidth) + padding;
+      }
 
-      const parentWidth = parentElement.getBoundingClientRect().width;
+      setTranslateX();
 
-      const padding =
-        parseInt(window.getComputedStyle(box[0]).padding) / 2 || 0;
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".work-section",
+          start: "top top",
+          end: `+=${translateX}`,
+          scrub: true,
+          pin: true,
+          id: "work",
+        },
+      });
 
-      translateX =
-        rect.width * box.length - (rectLeft + parentWidth) + padding;
-    }
-
-    setTranslateX();
-
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".work-section",
-        start: "top top",
-        end: `+=${translateX}`,
-        scrub: true,
-        pin: true,
-        id: "work",
-      },
-    });
-
-    timeline.to(".work-flex", {
-      x: -translateX,
-      ease: "none",
-    });
-
-    return () => {
-      timeline.kill();
-      ScrollTrigger.getById("work")?.kill();
+      timeline.to(".work-flex", {
+        x: -translateX,
+        ease: "none",
+      });
     };
 
+    // Dynamically load GSAP so it bypasses bundler resolution errors
+    if (!(window as any).gsap) {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
+      script.onload = () => {
+        const stScript = document.createElement("script");
+        stScript.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
+        stScript.onload = initAnimation;
+        document.head.appendChild(stScript);
+      };
+      document.head.appendChild(script);
+    } else {
+      initAnimation();
+    }
+
+    return () => {
+      const ScrollTrigger = (window as any).ScrollTrigger;
+      if (ScrollTrigger) {
+        ScrollTrigger.getById("work")?.kill();
+      }
+    };
   }, []);
 
   /* =========================
@@ -122,64 +130,65 @@ const Work = () => {
      ========================= */
   return (
     <div className="work-section" id="work">
-
+      <style>{`
+        .work-section { overflow: hidden; background: #111; color: #fff; padding: 50px 0; min-height: 100vh; font-family: sans-serif; }
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .work-flex { display: flex; flex-wrap: nowrap; width: max-content; gap: 2rem; padding: 2rem 0; }
+        .work-box { width: 80vw; max-width: 500px; background: #222; padding: 2rem; border-radius: 12px; }
+        .work-slider-controls { margin-top: 1rem; }
+        .slider-btn { background: #444; color: white; border: none; padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 1.2rem; }
+        .slider-btn:hover { background: #666; }
+        .project-link { color: #4facfe; text-decoration: none; font-weight: bold; }
+        .project-link:hover { text-decoration: underline; }
+        h2 { font-size: 2.5rem; margin-bottom: 0; }
+        h3 { color: #666; font-size: 2.5rem; margin: 0 0 1rem 0; }
+        h4 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.2rem; }
+        p { color: #ccc; line-height: 1.5; }
+      `}</style>
       <div className="work-container section-container">
-
         <h2>Projects</h2>
 
         <div className="work-slider-controls">
-          <button className="slider-btn" onClick={prevSlide}>‹</button>
-          <button className="slider-btn" onClick={nextSlide}>›</button>
+          <button className="slider-btn" onClick={prevSlide}>
+            ‹
+          </button>
+          <button className="slider-btn" onClick={nextSlide}>
+            ›
+          </button>
         </div>
 
         <div className="work-flex" ref={flexRef}>
-
           {projects.map((project, index) => (
-
             <div className="work-box" key={index}>
-
               <div className="work-info">
-
                 <div className="work-title">
-
                   <h3>{String(index + 1).padStart(2, "0")}</h3>
 
                   <div>
                     <h4>{project.title}</h4>
-                    <p>{project.tech.join(" • ")}</p>
+                    {/* Replaced category with tech stack */}
+                    <p>{project.tech.join(" • ")}</p> 
                   </div>
-
                 </div>
 
                 <h4>Overview</h4>
-
                 <p>{project.description}</p>
 
+                {/* Added GitHub Button */}
                 <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="project-link"
+                  style={{ display: "inline-block", marginTop: "1rem" }}
                 >
                   View on GitHub →
                 </a>
-
               </div>
-
-              {/* <WorkImage
-                image={project.image}
-                alt={project.title}
-              /> 
-              */}
-
             </div>
-
           ))}
-
         </div>
-
       </div>
-
     </div>
   );
 };
