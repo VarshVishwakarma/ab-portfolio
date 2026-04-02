@@ -64,7 +64,7 @@ const Work = () => {
      UI
      ========================= */
   return (
-    <div className="work-section" id="work">
+    <div className="work-section" id="projects">
       {/* INJECTED STYLES TO REPLACE Work.css */}
       <style>{`
         .work-section {
