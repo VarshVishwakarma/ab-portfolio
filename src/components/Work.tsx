@@ -111,15 +111,18 @@ const Work = () => {
      SLIDER BUTTONS
      ========================= */
   const nextSlide = () => {
-    window.scrollTo({
-      top: window.scrollY + 500,
+    // Calculates the approximate width of one card + the gap (2rem = 32px)
+    const scrollAmount = (window.innerWidth * 0.8) + 32;
+    window.scrollBy({
+      top: scrollAmount,
       behavior: "smooth",
     });
   };
 
   const prevSlide = () => {
-    window.scrollTo({
-      top: window.scrollY - 500,
+    const scrollAmount = (window.innerWidth * 0.8) + 32;
+    window.scrollBy({
+      top: -scrollAmount,
       behavior: "smooth",
     });
   };
@@ -133,26 +136,63 @@ const Work = () => {
         .work-section { overflow: hidden; background: #111; color: #fff; padding: 50px 0; min-height: 100vh; font-family: sans-serif; }
         .section-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .work-flex { display: flex; flex-wrap: nowrap; width: max-content; gap: 2rem; padding: 2rem 0; }
-        .work-box { width: 80vw; max-width: 500px; background: #222; padding: 2rem; border-radius: 12px; }
-        .work-slider-controls { margin-top: 1rem; }
-        .slider-btn { background: #444; color: white; border: none; padding: 0.5rem 1rem; margin-right: 0.5rem; cursor: pointer; border-radius: 4px; font-size: 1.2rem; }
-        .slider-btn:hover { background: #666; }
-        .project-link { color: #4facfe; text-decoration: none; font-weight: bold; }
-        .project-link:hover { text-decoration: underline; }
+        .work-box { width: 80vw; max-width: 500px; background: #222; padding: 2rem; border-radius: 12px; transition: transform 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .work-box:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.1); }
+        
+        .work-slider-controls { margin-top: 1.5rem; display: flex; gap: 1rem; }
+        .slider-btn { 
+          background: rgba(255, 255, 255, 0.05); 
+          color: #fff; 
+          border: 1px solid rgba(255, 255, 255, 0.1); 
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer; 
+          border-radius: 50%; 
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          backdrop-filter: blur(10px);
+        }
+        .slider-btn:hover { 
+          background: rgba(255, 255, 255, 0.15); 
+          border-color: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .slider-btn:active {
+          transform: translateY(0) scale(0.95);
+        }
+        .slider-btn svg {
+          width: 20px;
+          height: 20px;
+          stroke: currentColor;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          fill: none;
+        }
+
+        .project-link { color: #4facfe; text-decoration: none; font-weight: bold; transition: color 0.2s; }
+        .project-link:hover { color: #00f2fe; text-decoration: underline; }
         h2 { font-size: 2.5rem; margin-bottom: 0; }
-        h3 { color: #666; font-size: 2.5rem; margin: 0 0 1rem 0; }
+        h3 { color: #555; font-size: 3rem; margin: 0 0 1rem 0; font-weight: 800; letter-spacing: -2px; }
         h4 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.2rem; }
-        p { color: #ccc; line-height: 1.5; }
+        p { color: #aaa; line-height: 1.6; }
       `}</style>
       <div className="work-container section-container">
         <h2>Projects</h2>
 
         <div className="work-slider-controls">
-          <button className="slider-btn" onClick={prevSlide}>
-            ‹
+          <button className="slider-btn" onClick={prevSlide} aria-label="Previous Project">
+            <svg viewBox="0 0 24 24">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
           </button>
-          <button className="slider-btn" onClick={nextSlide}>
-            ›
+          <button className="slider-btn" onClick={nextSlide} aria-label="Next Project">
+            <svg viewBox="0 0 24 24">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
           </button>
         </div>
 
@@ -164,24 +204,27 @@ const Work = () => {
                   <h3>{String(index + 1).padStart(2, "0")}</h3>
 
                   <div>
-                    <h4>{project.title}</h4>
-                    {/* Replaced category with tech stack */}
-                    <p>{project.tech.join(" • ")}</p> 
+                    <h4 style={{ color: "#fff" }}>{project.title}</h4>
+                    <p style={{ fontSize: "0.9rem", color: "#4facfe" }}>
+                      {project.tech.join(" • ")}
+                    </p> 
                   </div>
                 </div>
 
-                <h4>Overview</h4>
+                <h4 style={{ marginTop: "1.5rem", color: "#ddd" }}>Overview</h4>
                 <p>{project.description}</p>
 
-                {/* Added GitHub Button */}
                 <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="project-link"
-                  style={{ display: "inline-block", marginTop: "1rem" }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", marginTop: "1.5rem" }}
                 >
-                  View on GitHub →
+                  View on GitHub 
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
                 </a>
               </div>
             </div>
