@@ -11,7 +11,7 @@ const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
   /* =========================
-     🔥 MERGED PROJECT DATA
+     🔥 UPDATED PROJECT DATA
      ========================= */
   const projects = [
     {
@@ -49,7 +49,7 @@ const Work = () => {
   ];
 
   /* =========================
-     GSAP SCROLL (KEEP ORIGINAL)
+     GSAP SCROLL (UNCHANGED)
      ========================= */
   useEffect(() => {
 
@@ -135,13 +135,12 @@ const Work = () => {
                 </div>
 
                 <h4>Overview</h4>
-
                 <p>{project.description}</p>
 
                 {/* 🔥 TECH STACK */}
-                <div className="tech-stack">
+                <p className="tech-stack">
                   {project.tech.join(" • ")}
-                </div>
+                </p>
 
                 {/* 🔥 GITHUB LINK */}
                 <a
