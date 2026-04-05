@@ -25,12 +25,10 @@
 
 .work-flex {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 2rem;
   height: 100%;
   align-items: center;
 
-  /* IMPORTANT */
+  /* KEEP ORIGINAL DESIGN BUT FIX WIDTH */
   width: max-content;
 }
 
