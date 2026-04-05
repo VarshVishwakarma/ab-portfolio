@@ -23,13 +23,18 @@
    FLEX TRACK (GSAP CONTROLLED)
 ========================= */
 
-.work-flex {
-  display: flex;
-  height: 100%;
-  align-items: center;
+.work-box {
+  width: 600px;
+  padding: 50px;
 
-  /* KEEP ORIGINAL DESIGN BUT FIX WIDTH */
-  width: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  /* 🔥 CRITICAL FIX */
+  flex-shrink: 0;
+
+  box-sizing: border-box;
 }
 
 /* =========================
