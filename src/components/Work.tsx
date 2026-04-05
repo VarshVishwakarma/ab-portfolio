@@ -54,14 +54,14 @@ const Work = () => {
         if (!flexContainer) return;
 
         const getScrollAmount = () => {
-          // 1. Grab the parent's offset. (Safer than flexContainer because flexContainer moves during scroll)
-          const containerOffset = flexContainer.parentElement?.getBoundingClientRect().left || 0;
-          
-          // 2. Full scrollable width - Viewport width + Initial left offset + extra right-side padding (60px)
-          const totalDistance = flexContainer.scrollWidth - window.innerWidth + containerOffset + 60;
-          
-          return Math.max(0, totalDistance);
-        };
+  const flexContainer = flexRef.current;
+  if (!flexContainer) return 0;
+
+  return Math.max(
+    0,
+    flexContainer.scrollWidth - window.innerWidth + 40 // small buffer only
+  );
+};
 
         gsap.to(".work-flex", {
           x: () => -getScrollAmount(),
@@ -70,7 +70,7 @@ const Work = () => {
             trigger: ".work-section",
             start: "top top",
             end: () => `+=${getScrollAmount()}`,
-            scrub: 1, // '1' adds a slight smoothing effect to the scroll
+            scrub: true, // '1' adds a slight smoothing effect to the scroll
             pin: true,
             invalidateOnRefresh: true, // Recalculates 'x' and 'end' on window resize
           },
