@@ -1,9 +1,13 @@
 import "./styles/Work.css";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
 
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const flexRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
@@ -36,52 +40,112 @@ const Work = () => {
     },
   ];
 
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
+  useEffect(() => {
 
-    const amount = 300;
-    scrollRef.current.scrollBy({
-      left: direction === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
-  };
+    let translateX = 0;
+
+    function setTranslateX() {
+      const box = document.getElementsByClassName("work-box");
+
+      if (!box.length) return;
+
+      const rectLeft = document
+        .querySelector(".work-container")!
+        .getBoundingClientRect().left;
+
+      const rect = box[0].getBoundingClientRect();
+
+      const parentWidth =
+        box[0].parentElement!.getBoundingClientRect().width;
+
+      const padding =
+        parseInt(window.getComputedStyle(box[0]).padding) / 2;
+
+      translateX =
+        rect.width * box.length - (rectLeft + parentWidth) + padding;
+
+      if (translateX < 0) translateX = 0;
+    }
+
+    setTimeout(() => {
+      setTranslateX();
+
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".work-section",
+          start: "top top",
+          end: `+=${translateX}`,
+          scrub: true,
+          pin: true,
+          id: "work",
+        },
+      });
+
+      timeline.to(".work-flex", {
+        x: -translateX,
+        ease: "none",
+      });
+
+    }, 200);
+
+    return () => {
+      ScrollTrigger.getById("work")?.kill();
+    };
+
+  }, []);
 
   return (
-    <div className="work-section" id="projects">
+    <div className="work-section" id="work">
 
-      <div className="work-container">
+      <div className="work-container section-container">
 
-        <div className="work-header">
-          <h2>My <span>Projects</span></h2>
+        <h2>
+          My <span>Projects</span>
+        </h2>
 
-          <div className="slider-buttons">
-            <button onClick={() => scroll("left")}>‹</button>
-            <button onClick={() => scroll("right")}>›</button>
-          </div>
-        </div>
-
-        <div className="work-scroll" ref={scrollRef}>
+        <div className="work-flex" ref={flexRef}>
 
           {projects.map((project, index) => (
 
-            <div className="work-card" key={index}>
+            <div className="work-box" key={index}>
 
-              <h3>{project.title}</h3>
-              <p className="category">{project.category}</p>
+              <div className="work-info">
 
-              <p>{project.description}</p>
+                <div className="work-title">
 
-              <div className="tech-stack">
-                {project.tech.join(" • ")}
+                  <h3>{String(index + 1).padStart(2, "0")}</h3>
+
+                  <div>
+                    <h4>{project.title}</h4>
+                    <p>{project.category}</p>
+                  </div>
+
+                </div>
+
+                <h4>Overview</h4>
+                <p>{project.description}</p>
+
+                {/* TECH STACK */}
+                <p style={{ color: "#38bdf8", fontSize: "13px", marginTop: "6px" }}>
+                  {project.tech.join(" • ")}
+                </p>
+
+                {/* LINK */}
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "#38bdf8",
+                    fontSize: "13px",
+                    marginTop: "8px",
+                    display: "inline-block",
+                  }}
+                >
+                  View on GitHub →
+                </a>
+
               </div>
-
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on GitHub →
-              </a>
 
             </div>
 
