@@ -11,49 +11,45 @@ const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
   /* =========================
-     🔥 REAL PROJECT DATA
+     🔥 MERGED PROJECT DATA
      ========================= */
   const projects = [
     {
-      title: "Network Security Analyzer",
+      title: "SyntexHub Encrypted Chat App",
       category: "Cybersecurity",
-      description: "Built a Python-based tool to analyze network traffic, detect anomalies, and identify potential cyber threats in real-time.",
+      description: "Real-time encrypted chat with secure communication.",
+      tech: ["React", "Node.js", "WebSockets", "Encryption"],
+      github: "https://github.com/Abhiimaurya0080/syntexhub_Encrypted_chat_app",
       image: "/images/project1.webp",
     },
     {
-      title: "Linux Security Automation",
-      category: "Automation",
-      description: "Automated system hardening and vulnerability scanning using Bash scripting and Linux security best practices.",
+      title: "Encrypted File Transfer",
+      category: "Security System",
+      description: "Secure file transfer with encryption & protected storage.",
+      tech: ["Python", "Encryption", "File Handling"],
+      github: "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
       image: "/images/project2.webp",
     },
     {
-      title: "Cyber Threat Detection Model",
-      category: "Machine Learning",
-      description: "Developed a machine learning model to detect malicious patterns and predict potential cyber attacks.",
+      title: "Bug Bounty Toolkit",
+      category: "Ethical Hacking",
+      description: "Toolkit for vulnerability detection & automation.",
+      tech: ["Python", "Security Tools"],
+      github: "https://github.com/Abhiimaurya0080/h4cker_bug-bounty",
       image: "/images/project3.webp",
     },
     {
-      title: "Penetration Testing Toolkit",
-      category: "Ethical Hacking",
-      description: "Created a custom toolkit for vulnerability assessment and penetration testing using open-source security tools.",
+      title: "Port Scanner",
+      category: "Networking",
+      description: "Detect open ports & analyze vulnerabilities.",
+      tech: ["Python", "Sockets", "Networking"],
+      github: "https://github.com/Abhiimaurya0080/Syntecxhub_port_scanner",
       image: "/images/project4.webp",
-    },
-    {
-      title: "Security Log Analyzer",
-      category: "SOC Operations",
-      description: "Designed a log monitoring system to analyze security events and assist in incident response workflows.",
-      image: "/images/project5.webp",
-    },
-    {
-      title: "Cybersecurity Research Work",
-      category: "Research",
-      description: "Conducted in-depth research on modern cyber threats, attack vectors, and defense strategies in real-world environments.",
-      image: "/images/project6.webp",
     },
   ];
 
   /* =========================
-     GSAP SCROLL
+     GSAP SCROLL (KEEP ORIGINAL)
      ========================= */
   useEffect(() => {
 
@@ -78,6 +74,8 @@ const Work = () => {
 
       translateX =
         rect.width * box.length - (rectLeft + parentWidth) + padding;
+
+      if (translateX < 0) translateX = 0;
     }
 
     setTranslateX();
@@ -106,38 +104,16 @@ const Work = () => {
   }, []);
 
   /* =========================
-     SLIDER BUTTONS
-     ========================= */
-  const nextSlide = () => {
-    window.scrollTo({
-      top: window.scrollY + 500,
-      behavior: "smooth",
-    });
-  };
-
-  const prevSlide = () => {
-    window.scrollTo({
-      top: window.scrollY - 500,
-      behavior: "smooth",
-    });
-  };
-
-  /* =========================
      UI
      ========================= */
   return (
-    <div className="work-section" id="work">
+    <div className="work-section" id="projects">
 
       <div className="work-container section-container">
 
         <h2>
-          My <span>Work</span>
+          My <span>Projects</span>
         </h2>
-
-        <div className="work-slider-controls">
-          <button className="slider-btn" onClick={prevSlide}>‹</button>
-          <button className="slider-btn" onClick={nextSlide}>›</button>
-        </div>
 
         <div className="work-flex" ref={flexRef}>
 
@@ -161,6 +137,21 @@ const Work = () => {
                 <h4>Overview</h4>
 
                 <p>{project.description}</p>
+
+                {/* 🔥 TECH STACK */}
+                <div className="tech-stack">
+                  {project.tech.join(" • ")}
+                </div>
+
+                {/* 🔥 GITHUB LINK */}
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-link"
+                >
+                  View on GitHub →
+                </a>
 
               </div>
 
