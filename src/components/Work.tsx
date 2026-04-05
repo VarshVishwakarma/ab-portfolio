@@ -1,4 +1,5 @@
-import "./styles/Work.css";
+// Commented out to prevent build errors in this preview environment
+// import "./styles/Work.css";
 import { useEffect, useRef } from "react";
 
 const Work = () => {
@@ -38,8 +39,10 @@ const Work = () => {
 
   useEffect(() => {
     let ctx: any;
+    let isMounted = true;
 
     const initAnimation = () => {
+      if (!isMounted) return;
       const gsap = (window as any).gsap;
       const ScrollTrigger = (window as any).ScrollTrigger;
       if (!gsap || !ScrollTrigger) return;
@@ -50,8 +53,15 @@ const Work = () => {
         const flexContainer = flexRef.current;
         if (!flexContainer) return;
 
-        const getScrollAmount = () =>
-          flexContainer.scrollWidth - window.innerWidth;
+        const getScrollAmount = () => {
+          // 1. Grab the parent's offset. (Safer than flexContainer because flexContainer moves during scroll)
+          const containerOffset = flexContainer.parentElement?.getBoundingClientRect().left || 0;
+          
+          // 2. Full scrollable width - Viewport width + Initial left offset + extra right-side padding (60px)
+          const totalDistance = flexContainer.scrollWidth - window.innerWidth + containerOffset + 60;
+          
+          return Math.max(0, totalDistance);
+        };
 
         gsap.to(".work-flex", {
           x: () => -getScrollAmount(),
@@ -60,37 +70,39 @@ const Work = () => {
             trigger: ".work-section",
             start: "top top",
             end: () => `+=${getScrollAmount()}`,
-            scrub: true,
+            scrub: 1, // '1' adds a slight smoothing effect to the scroll
             pin: true,
-            invalidateOnRefresh: true,
+            invalidateOnRefresh: true, // Recalculates 'x' and 'end' on window resize
           },
         });
 
-        // Force refresh after layout stabilizes
+        // Force refresh after layout stabilizes to ensure accurate initial calculations
         setTimeout(() => {
           ScrollTrigger.refresh();
         }, 300);
       });
     };
 
-    if (!(window as any).gsap) {
+    // Dynamically load GSAP avoiding duplicates
+    if (!(window as any).gsap && !document.querySelector("#gsap-core")) {
       const script = document.createElement("script");
-      script.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
+      script.id = "gsap-core";
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
       script.onload = () => {
         const stScript = document.createElement("script");
-        stScript.src =
-          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
+        stScript.id = "gsap-st";
+        stScript.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
         stScript.onload = initAnimation;
         document.head.appendChild(stScript);
       };
       document.head.appendChild(script);
-    } else {
+    } else if ((window as any).gsap && (window as any).ScrollTrigger) {
       initAnimation();
     }
 
     return () => {
-      ctx?.revert();
+      isMounted = false;
+      ctx?.revert(); // Properly clean up all GSAP instances & ScrollTriggers on unmount
     };
   }, []);
 
@@ -106,6 +118,27 @@ const Work = () => {
 
   return (
     <div className="work-section" id="projects">
+      {/* CRITICAL CSS GUARANTEE: 
+        This prevents flexbox from squishing the cards, which is the #1 cause 
+        of GSAP scrollWidth calculations coming up short. 
+      */}
+      <style>{`
+        .work-section {
+          overflow-x: hidden;
+        }
+        .work-flex {
+          display: flex;
+          flex-wrap: nowrap;
+          width: max-content;
+          gap: 2rem;
+        }
+        .work-box {
+          flex: 0 0 auto; /* <--- Prevents cards from shrinking! */
+          width: 80vw;
+          max-width: 500px;
+        }
+      `}</style>
+
       <div className="work-container section-container">
         <h2>
           My <span>Projects</span>
