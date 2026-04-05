@@ -11,7 +11,7 @@ const Work = () => {
   const flexRef = useRef<HTMLDivElement>(null);
 
   /* =========================
-     🔥 UPDATED PROJECT DATA
+     🔥 REAL PROJECT DATA
      ========================= */
   const projects = [
     {
@@ -20,7 +20,6 @@ const Work = () => {
       description: "Real-time encrypted chat with secure communication.",
       tech: ["React", "Node.js", "WebSockets", "Encryption"],
       github: "https://github.com/Abhiimaurya0080/syntexhub_Encrypted_chat_app",
-      image: "/images/project1.webp",
     },
     {
       title: "Encrypted File Transfer",
@@ -28,7 +27,6 @@ const Work = () => {
       description: "Secure file transfer with encryption & protected storage.",
       tech: ["Python", "Encryption", "File Handling"],
       github: "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
-      image: "/images/project2.webp",
     },
     {
       title: "Bug Bounty Toolkit",
@@ -36,7 +34,6 @@ const Work = () => {
       description: "Toolkit for vulnerability detection & automation.",
       tech: ["Python", "Security Tools"],
       github: "https://github.com/Abhiimaurya0080/h4cker_bug-bounty",
-      image: "/images/project3.webp",
     },
     {
       title: "Port Scanner",
@@ -44,12 +41,11 @@ const Work = () => {
       description: "Detect open ports & analyze vulnerabilities.",
       tech: ["Python", "Sockets", "Networking"],
       github: "https://github.com/Abhiimaurya0080/Syntecxhub_port_scanner",
-      image: "/images/project4.webp",
     },
   ];
 
   /* =========================
-     GSAP SCROLL (UNCHANGED)
+     GSAP SCROLL
      ========================= */
   useEffect(() => {
 
@@ -74,8 +70,6 @@ const Work = () => {
 
       translateX =
         rect.width * box.length - (rectLeft + parentWidth) + padding;
-
-      if (translateX < 0) translateX = 0;
     }
 
     setTranslateX();
@@ -104,16 +98,38 @@ const Work = () => {
   }, []);
 
   /* =========================
+     SLIDER BUTTONS
+     ========================= */
+  const nextSlide = () => {
+    window.scrollTo({
+      top: window.scrollY + 500,
+      behavior: "smooth",
+    });
+  };
+
+  const prevSlide = () => {
+    window.scrollTo({
+      top: window.scrollY - 500,
+      behavior: "smooth",
+    });
+  };
+
+  /* =========================
      UI
      ========================= */
   return (
-    <div className="work-section" id="projects">
+    <div className="work-section" id="work">
 
       <div className="work-container section-container">
 
         <h2>
-          My <span>Projects</span>
+          My <span>Work</span>
         </h2>
+
+        <div className="work-slider-controls">
+          <button className="slider-btn" onClick={prevSlide}>‹</button>
+          <button className="slider-btn" onClick={nextSlide}>›</button>
+        </div>
 
         <div className="work-flex" ref={flexRef}>
 
@@ -135,22 +151,8 @@ const Work = () => {
                 </div>
 
                 <h4>Overview</h4>
+
                 <p>{project.description}</p>
-
-                {/* 🔥 TECH STACK */}
-                <p className="tech-stack">
-                  {project.tech.join(" • ")}
-                </p>
-
-                {/* 🔥 GITHUB LINK */}
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link"
-                >
-                  View on GitHub →
-                </a>
 
               </div>
 
