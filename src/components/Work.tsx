@@ -1,121 +1,182 @@
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef, useEffect } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
 
+  const flexRef = useRef<HTMLDivElement>(null);
+
+  /* =========================
+     🔥 REAL PROJECT DATA
+     ========================= */
   const projects = [
     {
-      title: "SyntexHub Encrypted Chat App",
+      title: "Network Security Analyzer",
       category: "Cybersecurity",
-      description: "Real-time encrypted chat with secure communication.",
-      tech: ["React", "Node.js", "WebSockets", "Encryption"],
-      github: "https://github.com/Abhiimaurya0080/syntexhub_Encrypted_chat_app",
+      description: "Built a Python-based tool to analyze network traffic, detect anomalies, and identify potential cyber threats in real-time.",
       image: "/images/project1.webp",
     },
     {
-      title: "Encrypted File Transfer",
-      category: "Security System",
-      description: "Secure file transfer with encryption & protected storage.",
-      tech: ["Python", "Encryption", "File Handling"],
-      github:
-        "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
+      title: "Linux Security Automation",
+      category: "Automation",
+      description: "Automated system hardening and vulnerability scanning using Bash scripting and Linux security best practices.",
       image: "/images/project2.webp",
     },
     {
-      title: "Bug Bounty Toolkit",
-      category: "Ethical Hacking",
-      description: "Toolkit for vulnerability detection & automation.",
-      tech: ["Python", "Security Tools"],
-      github: "https://github.com/Abhiimaurya0080/h4cker_bug-bounty",
+      title: "Cyber Threat Detection Model",
+      category: "Machine Learning",
+      description: "Developed a machine learning model to detect malicious patterns and predict potential cyber attacks.",
       image: "/images/project3.webp",
     },
     {
-      title: "Port Scanner",
-      category: "Networking",
-      description: "Detect open ports & analyze vulnerabilities.",
-      tech: ["Python", "Sockets", "Networking"],
-      github: "https://github.com/Abhiimaurya0080/Syntecxhub_port_scanner",
+      title: "Penetration Testing Toolkit",
+      category: "Ethical Hacking",
+      description: "Created a custom toolkit for vulnerability assessment and penetration testing using open-source security tools.",
       image: "/images/project4.webp",
+    },
+    {
+      title: "Security Log Analyzer",
+      category: "SOC Operations",
+      description: "Designed a log monitoring system to analyze security events and assist in incident response workflows.",
+      image: "/images/project5.webp",
+    },
+    {
+      title: "Cybersecurity Research Work",
+      category: "Research",
+      description: "Conducted in-depth research on modern cyber threats, attack vectors, and defense strategies in real-world environments.",
+      image: "/images/project6.webp",
     },
   ];
 
+  /* =========================
+     GSAP SCROLL
+     ========================= */
   useEffect(() => {
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
 
-    const ctx = gsap.context(() => {
-      
-      const getScrollDistance = () =>
-        track.scrollWidth - window.innerWidth;
+    let translateX = 0;
 
-      gsap.to(track, {
-        x: () => -getScrollDistance(), // 🔥 dynamic fix
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${getScrollDistance()}`, // 🔥 dynamic fix
-          scrub: true,
-          pin: true,
-          invalidateOnRefresh: true,
-        },
-      });
+    function setTranslateX() {
+      const box = document.getElementsByClassName("work-box");
 
-    }, section);
+      if (!box.length) return;
 
-    // 🔥 Fix layout timing issues
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 300);
+      const rectLeft = document
+        .querySelector(".work-container")!
+        .getBoundingClientRect().left;
 
-    return () => ctx.revert(); // ✅ safe cleanup
+      const rect = box[0].getBoundingClientRect();
+
+      const parentWidth =
+        box[0].parentElement!.getBoundingClientRect().width;
+
+      const padding =
+        parseInt(window.getComputedStyle(box[0]).padding) / 2;
+
+      translateX =
+        rect.width * box.length - (rectLeft + parentWidth) + padding;
+    }
+
+    setTranslateX();
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".work-section",
+        start: "top top",
+        end: `+=${translateX}`,
+        scrub: true,
+        pin: true,
+        id: "work",
+      },
+    });
+
+    timeline.to(".work-flex", {
+      x: -translateX,
+      ease: "none",
+    });
+
+    return () => {
+      timeline.kill();
+      ScrollTrigger.getById("work")?.kill();
+    };
 
   }, []);
 
+  /* =========================
+     SLIDER BUTTONS
+     ========================= */
+  const nextSlide = () => {
+    window.scrollTo({
+      top: window.scrollY + 500,
+      behavior: "smooth",
+    });
+  };
+
+  const prevSlide = () => {
+    window.scrollTo({
+      top: window.scrollY - 500,
+      behavior: "smooth",
+    });
+  };
+
+  /* =========================
+     UI
+     ========================= */
   return (
-    <div className="work-section" ref={sectionRef} id="projects">
+    <div className="work-section" id="work">
+
       <div className="work-container section-container">
 
-        <h2>My <span>Projects</span></h2>
+        <h2>
+          My <span>Work</span>
+        </h2>
 
-        <div className="work-track" ref={trackRef}>
+        <div className="work-slider-controls">
+          <button className="slider-btn" onClick={prevSlide}>‹</button>
+          <button className="slider-btn" onClick={nextSlide}>›</button>
+        </div>
+
+        <div className="work-flex" ref={flexRef}>
+
           {projects.map((project, index) => (
-            <div className="work-card" key={index}>
 
-              <h3>{project.title}</h3>
+            <div className="work-box" key={index}>
 
-              <p className="category">{project.category}</p>
+              <div className="work-info">
 
-              <p className="tech-stack">
-                {project.tech.join(" • ")}
-              </p>
+                <div className="work-title">
 
-              <p>{project.description}</p>
+                  <h3>{String(index + 1).padStart(2, "0")}</h3>
 
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="project-link"
-              >
-                View on GitHub →
-              </a>
+                  <div>
+                    <h4>{project.title}</h4>
+                    <p>{project.category}</p>
+                  </div>
 
-              <WorkImage image={project.image} alt={project.title} />
+                </div>
+
+                <h4>Overview</h4>
+
+                <p>{project.description}</p>
+
+              </div>
+
+              <WorkImage
+                image={project.image}
+                alt={project.title}
+              />
 
             </div>
+
           ))}
+
         </div>
 
       </div>
+
     </div>
   );
 };
