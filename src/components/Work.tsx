@@ -1,5 +1,5 @@
 // Commented out to prevent build errors in this preview environment
-// import "./styles/Work.css";
+import "./styles/Work.css";
 import { useEffect, useRef } from "react";
 
 const Work = () => {
