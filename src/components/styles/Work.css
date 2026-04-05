@@ -1,395 +1,110 @@
-.project-link {
-  display: inline-block;
-  margin-top: 12px;
-  color: #38bdf8;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.project-link:hover {
-  text-shadow: 0 0 10px #38bdf8;
-  transform: translateY(-2px);
-}
+/* =========================
+   BASE SECTION
+========================= */
 
 .work-section {
   height: 100vh;
-  box-sizing: border-box;
-  transition: 0s;
-  will-change: transform;
   position: relative;
-  
-  /* Fixes for visibility and stacking context */
+  overflow: hidden;
   z-index: 5;
-  isolation: isolate; /* Ensures the -1 z-index glow doesn't hide behind the body background */
-  overflow: hidden; /* Prevents horizontal scrollbar from overflowing cards */
 }
 
-/* Subtle radial glow background behind the section */
-.work-section::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80vw;
-  height: 80vw;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.04) 0%, transparent 60%);
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  pointer-events: none;
-}
+/* =========================
+   CONTAINER
+========================= */
 
-.work-section h2 {
-  margin-top: 100px;
-  font-size: 70px;
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  position: relative;
-  z-index: 10;
-}
-
-.work-section h2 > span {
-  color: #38bdf8;
-  text-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-}
-
-/* Container */
 .work-container {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  align-content: stretch;
-  position: relative;
-  z-index: 1;
-}
-
-.work-flex {
-  width: 100%;
   height: 100%;
   display: flex;
-  margin-left: -80px;
-  padding-right: 120px;
-  position: relative;
-  align-items: center; /* Centers the cards nicely inside the flex track */
-  
-  /* Maintained for Native Horizontal Scroll */
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scroll-behavior: smooth;
-}
-
-.work-flex::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-/* Modern Portfolio Cards with Glassmorphism */
-.work-box {
-  width: 600px;
-  padding: 50px;
-  margin: 0 20px; /* Provides room for hover lift without clipping */
-  
-  display: flex;
   flex-direction: column;
-  gap: 40px;
-  flex-shrink: 0;
-  justify-content: start;
-  box-sizing: border-box;
-  
-  /* Glassmorphism Base */
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-  
-  /* For Native scroll alignment */
-  scroll-snap-align: center;
 }
 
-/* Hover & Lift Interactions */
-.work-box:hover {
-  transform: translateY(-10px);
-  background: rgba(15, 23, 42, 0.7);
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.5),
-    0 0 20px rgba(56, 189, 248, 0.15),
-    inset 0 0 15px rgba(56, 189, 248, 0.05);
-  z-index: 10;
-}
-
-.work-flex .work-box:nth-child(even) {
-  flex-direction: column-reverse;
-}
-
-/* Refined Horizontal lines */
-.work-flex::before,
-.work-flex::after {
-  content: "";
-  width: calc(50000vw);
-  height: 1px;
-  
-  /* Upgraded to a sleek glowing gradient instead of a solid line */
-  background: linear-gradient(90deg, transparent, rgba(56,189,248,0.3) 5%, rgba(56,189,248,0.3) 95%, transparent);
-  position: absolute;
-  left: 50%;
-  top: 10%;
-  transform: translateX(-50%);
-  z-index: -1;
-}
-
-.work-flex::after {
-  top: 90%;
-}
-
-/* Project Number / Title Row */
-.work-title {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 10px;
-  align-items: center;
-}
-
-.work-title > div {
-  text-align: right;
-}
-
-.work-title h3 {
-  font-size: 60px;
-  line-height: 60px;
-  margin: 0;
-  font-weight: 700;
-  
-  /* Outline text for project numbers */
-  color: rgba(255, 255, 255, 0.1);
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.work-box:hover .work-title h3 {
-  color: rgba(56, 189, 248, 0.15);
-  -webkit-text-stroke: 1px #38bdf8;
-  text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-}
-
-/* Typography Hierarchy */
-.work-info h4 {
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0 0 5px 0;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-}
-
-/* Target the specific "Tools and features" subtitle */
-.work-info h4:not(:first-child) {
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #38bdf8;
-  margin: 25px 0 8px 0;
-  opacity: 0.9;
-}
-
-/* Adjusted selector to match our JSX structure for tech tags */
-.work-title div p {
-  font-size: 14px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #38bdf8;
-  margin: 0;
-}
-
-.work-info p {
-  margin: 0;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #cbd5e1; /* Slate 300 */
-}
-
-.work-info > p {
-  width: 95%;
-}
-
-/* Slider Controls */
-.work-slider-controls {
-  position: absolute;
-  top: 115px;
-  right: 0;
-  display: flex;
-  gap: 15px;
-  z-index: 20;
-}
-
-.slider-btn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: #38bdf8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.slider-btn:hover {
-  background: #38bdf8;
-  color: #0f172a;
-  border-color: #38bdf8;
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-  transform: translateY(-3px);
-}
-
-/* Responsive Overrides */
-@media only screen and (max-height: 900px) {
-  .work-box {
-    padding: 40px;
-    gap: 30px;
-  }
-  .work-section h2 {
-    font-size: 60px;
-    margin-top: 70px;
-    margin-bottom: 30px;
-  }
-}
-
-@media only screen and (max-width: 1400px) {
-  .work-title h3 {
-    font-size: 45px;
-  }
-  .work-info h4 {
-    font-size: 20px;
-  }
-  .work-info p {
-    font-size: 14px;
-  }
-  .work-box {
-    width: 450px;
-    padding: 40px;
-  }
-  .work-flex {
-    margin-left: -50px;
-    padding-right: 75px;
-  }
-  .work-section h2 {
-    font-size: 50px;
-  }
-}
-
-@media only screen and (max-width: 1200px) {
-  .work-box {
-    width: 380px;
-    padding: 30px;
-    gap: 25px;
-  }
-  .work-flex {
-    margin-left: -30px;
-    padding-right: 45px;
-  }
-}
-
-@media only screen and (max-height: 650px) {
-  .work-section h2 {
-    font-size: 40px;
-    margin-bottom: 20px;
-  }
-  .work-box {
-    gap: 20px;
-  }
-}
-
-@media only screen and (max-width: 1025px) {
-  .work-container {
-    align-content: normal;
-  }
-  
-  /* Hide slider buttons on mobile/tablet since it switches to vertical scrolling */
-  .work-slider-controls {
-    display: none;
-  }
-
-  .work-flex {
-    height: auto;
-    flex-direction: column;
-    overflow-x: hidden;
-    margin-left: 0;
-    padding-right: 0;
-    margin-top: 50px;
-  }
-  .work-box {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid rgba(56,189,248,0.1);
-    margin-bottom: 30px;
-    margin-left: 0;
-    margin-right: 0;
-  }
-  /* Remove vast background lines for vertical scrolling */
-  .work-flex::before,
-  .work-flex::after {
-    display: none;
-  }
-}
-
-.tech-stack {
-  font-size: 0.85rem;
-  color: #38bdf8;
-  margin-top: 6px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.tech-stack::before {
-  content: "Tech:";
-  color: #aaa;
-  margin-right: 6px;
-}
+/* =========================
+   FLEX TRACK (GSAP CONTROLLED)
+========================= */
 
 .work-flex {
   display: flex;
   flex-wrap: nowrap;
   gap: 2rem;
+  height: 100%;
+  align-items: center;
+
+  /* IMPORTANT */
+  width: max-content;
 }
 
+/* =========================
+   CARDS (CRITICAL FIX)
+========================= */
+
 .work-box {
-  flex: 0 0 80vw;
+  flex: 0 0 80vw;  /* 🔥 KEY FIX */
   max-width: 500px;
+
+  padding: 40px;
+  border-radius: 20px;
+
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(12px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  transition: all 0.3s ease;
+}
+
+.work-box:hover {
+  transform: translateY(-8px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+/* =========================
+   TEXT STYLING
+========================= */
+
+.work-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.work-title h3 {
+  font-size: 50px;
+  color: rgba(255,255,255,0.2);
+}
+
+.work-info h4 {
+  font-size: 20px;
+  color: white;
+}
+
+.work-info p {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+/* =========================
+   CATEGORY + TECH
+========================= */
+
+.category {
+  font-size: 0.8rem;
+  color: #aaa;
 }
 
 .tech-stack {
-  margin-top: 10px;
-  color: #38bdf8;
   font-size: 0.9rem;
-  font-weight: 500;
+  color: #38bdf8;
+  margin-top: 6px;
 }
 
-.category {
-  color: #aaa;
-  font-size: 0.85rem;
-}
+/* =========================
+   LINK
+========================= */
 
 .project-link {
-  display: inline-block;
-  margin-top: 12px;
+  margin-top: 10px;
   color: #38bdf8;
   text-decoration: none;
   font-weight: 600;
