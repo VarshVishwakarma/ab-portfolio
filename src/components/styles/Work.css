@@ -6,7 +6,6 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background: #0f172a; /* subtle dark base */
 }
 
 /* =========================
@@ -21,148 +20,80 @@
 }
 
 /* =========================
-   TRACK (GSAP CONTROLLED)
+   FLEX (MATCH YOUR TSX)
 ========================= */
 
-.work-track {
+.work-flex {
   display: flex;
   gap: 2rem;
   width: max-content;
-  height: 100%;
   align-items: center;
-  padding: 0 5vw;
 }
 
 /* =========================
    CARD
 ========================= */
 
-.work-card {
+.work-box {
   flex: 0 0 80vw;
   max-width: 500px;
 
-  padding: 28px;
-  border-radius: 18px;
+  padding: 24px;
+  border-radius: 12px;
 
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
-
-  transition: all 0.35s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 🔥 subtle glow layer */
-.work-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 60%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.work-card:hover::before {
-  opacity: 1;
-}
-
-/* 🔥 hover lift */
-.work-card:hover {
-  transform: translateY(-10px) scale(1.01);
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 
-    0 10px 30px rgba(0,0,0,0.5),
-    0 0 20px rgba(56,189,248,0.2);
+  gap: 12px;
 }
 
 /* =========================
    TEXT
 ========================= */
 
-.work-card h3 {
-  font-size: 20px;
-  color: #ffffff;
-  font-weight: 600;
+.work-title h3 {
+  font-size: 40px;
+  color: rgba(255,255,255,0.2);
+}
+
+.work-info h4 {
+  font-size: 18px;
+  color: white;
+}
+
+.work-info p {
+  font-size: 14px;
+  color: #cbd5e1;
 }
 
 .category {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: #94a3b8;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.work-card p {
-  font-size: 14px;
-  color: #cbd5e1;
-  line-height: 1.5;
 }
 
 /* =========================
-   TECH STACK (🔥 TAG STYLE)
+   TECH STACK
 ========================= */
 
 .tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
   margin-top: 6px;
-}
-
-.tech-stack span {
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  padding: 4px 8px;
-  font-size: 11px;
-  border-radius: 6px;
+  font-size: 13px;
   color: #38bdf8;
-  transition: 0.3s;
-}
-
-.tech-stack span:hover {
-  background: #38bdf8;
-  color: #0f172a;
 }
 
 /* =========================
-   BUTTON (CTA)
+   LINK
 ========================= */
 
 .project-link {
-  margin-top: 12px;
-  display: inline-block;
-  padding: 8px 14px;
-
-  border-radius: 6px;
-  border: 1px solid #38bdf8;
-
-  color: #38bdf8;
+  margin-top: 8px;
   font-size: 13px;
-  font-weight: 500;
-
+  color: #38bdf8;
   text-decoration: none;
-  transition: all 0.3s ease;
 }
 
 .project-link:hover {
-  background: #38bdf8;
-  color: #0f172a;
-  box-shadow: 0 0 12px #38bdf8;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 768px) {
-  .work-card {
-    flex: 0 0 90vw;
-  }
+  text-decoration: underline;
 }
