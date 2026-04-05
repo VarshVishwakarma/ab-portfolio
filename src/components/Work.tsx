@@ -2,11 +2,13 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 const Work = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
@@ -44,98 +46,62 @@ const Work = () => {
     },
   ];
 
-  useGSAP(() => {
-    let translateX = 0;
+  useEffect(() => {
+    const section = sectionRef.current;
+    const track = trackRef.current;
+    if (!section || !track) return;
 
-    function setTranslateX() {
-      const box = document.getElementsByClassName("work-box");
+    const totalWidth = track.scrollWidth;
+    const viewportWidth = window.innerWidth;
 
-      if (!box.length) return;
+    const scrollDistance = totalWidth - viewportWidth;
 
-      const rectLeft = document
-        .querySelector(".work-container")!
-        .getBoundingClientRect().left;
-
-      const rect = box[0].getBoundingClientRect();
-
-      const parentWidth =
-        box[0].parentElement!.getBoundingClientRect().width;
-
-      let padding =
-        parseInt(window.getComputedStyle(box[0]).padding) / 2;
-
-      translateX =
-        rect.width * box.length - (rectLeft + parentWidth) + padding;
-
-      if (translateX < 0) translateX = 0;
-    }
-
-    setTranslateX();
-
-    const timeline = gsap.timeline({
+    const animation = gsap.to(track, {
+      x: -scrollDistance,
+      ease: "none",
       scrollTrigger: {
-        trigger: ".work-section",
+        trigger: section,
         start: "top top",
-        end: `+=${translateX}`,
+        end: () => `+=${scrollDistance}`,
         scrub: true,
         pin: true,
-        id: "work",
+        invalidateOnRefresh: true,
       },
     });
 
-    timeline.to(".work-flex", {
-      x: -translateX,
-      ease: "none",
-    });
-
     return () => {
-      timeline.kill();
-      ScrollTrigger.getById("work")?.kill();
+      animation.kill();
+      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
 
   return (
-    <div className="work-section" id="projects">
+    <div className="work-section" ref={sectionRef} id="projects">
       <div className="work-container section-container">
 
-        <h2>
-          My <span>Projects</span>
-        </h2>
+        <h2>My <span>Projects</span></h2>
 
-        <div className="work-flex">
+        <div className="work-track" ref={trackRef}>
           {projects.map((project, index) => (
-            <div className="work-box" key={index}>
+            <div className="work-card" key={index}>
 
-              <div className="work-info">
+              <h3>{project.title}</h3>
 
-                <div className="work-title">
-                  <h3>{String(index + 1).padStart(2, "0")}</h3>
+              <p className="category">{project.category}</p>
 
-                  <div>
-                    <h4>{project.title}</h4>
-                    <p className="category">{project.category}</p>
-                  </div>
-                </div>
+              <p className="tech-stack">
+                {project.tech.join(" • ")}
+              </p>
 
-                <h4>Overview</h4>
-                <p>{project.description}</p>
+              <p>{project.description}</p>
 
-                {/* 🔥 TECH STACK FIX */}
-                <div className="tech-stack">
-                  {project.tech.join(" • ")}
-                </div>
-
-                {/* 🔥 GITHUB LINK */}
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-link"
-                >
-                  View on GitHub →
-                </a>
-
-              </div>
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub →
+              </a>
 
               <WorkImage image={project.image} alt={project.title} />
 
