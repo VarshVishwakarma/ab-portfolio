@@ -1,7 +1,9 @@
 import "./styles/Work.css";
-import WorkImage from "./WorkImage";
+import { useRef } from "react";
 
 const Work = () => {
+
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
@@ -10,7 +12,6 @@ const Work = () => {
       description: "Real-time encrypted chat with secure communication.",
       tech: ["React", "Node.js", "WebSockets", "Encryption"],
       github: "https://github.com/Abhiimaurya0080/syntexhub_Encrypted_chat_app",
-      image: "/images/project1.webp",
     },
     {
       title: "Encrypted File Transfer",
@@ -18,7 +19,6 @@ const Work = () => {
       description: "Secure file transfer with encryption & protected storage.",
       tech: ["Python", "Encryption", "File Handling"],
       github: "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
-      image: "/images/project2.webp",
     },
     {
       title: "Bug Bounty Toolkit",
@@ -26,7 +26,6 @@ const Work = () => {
       description: "Toolkit for vulnerability detection & automation.",
       tech: ["Python", "Security Tools"],
       github: "https://github.com/Abhiimaurya0080/h4cker_bug-bounty",
-      image: "/images/project3.webp",
     },
     {
       title: "Port Scanner",
@@ -34,18 +33,34 @@ const Work = () => {
       description: "Detect open ports & analyze vulnerabilities.",
       tech: ["Python", "Sockets", "Networking"],
       github: "https://github.com/Abhiimaurya0080/Syntecxhub_port_scanner",
-      image: "/images/project4.webp",
     },
   ];
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+
+    const amount = 300;
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <div className="work-section" id="projects">
 
       <div className="work-container">
 
-        <h2>My <span>Projects</span></h2>
+        <div className="work-header">
+          <h2>My <span>Projects</span></h2>
 
-        <div className="work-scroll">
+          <div className="slider-buttons">
+            <button onClick={() => scroll("left")}>‹</button>
+            <button onClick={() => scroll("right")}>›</button>
+          </div>
+        </div>
+
+        <div className="work-scroll" ref={scrollRef}>
 
           {projects.map((project, index) => (
 
@@ -67,8 +82,6 @@ const Work = () => {
               >
                 View on GitHub →
               </a>
-
-              <WorkImage image={project.image} alt={project.title} />
 
             </div>
 
