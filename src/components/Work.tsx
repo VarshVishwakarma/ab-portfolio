@@ -10,9 +10,6 @@ const Work = () => {
 
   const flexRef = useRef<HTMLDivElement>(null);
 
-  /* =========================
-     🔥 REAL PROJECT DATA
-     ========================= */
   const projects = [
     {
       title: "SyntexHub Encrypted Chat App",
@@ -44,16 +41,12 @@ const Work = () => {
     },
   ];
 
-  /* =========================
-     GSAP SCROLL
-     ========================= */
   useEffect(() => {
 
     let translateX = 0;
 
     function setTranslateX() {
       const box = document.getElementsByClassName("work-box");
-
       if (!box.length) return;
 
       const rectLeft = document
@@ -70,6 +63,8 @@ const Work = () => {
 
       translateX =
         rect.width * box.length - (rectLeft + parentWidth) + padding;
+
+      if (translateX < 0) translateX = 0;
     }
 
     setTranslateX();
@@ -97,39 +92,14 @@ const Work = () => {
 
   }, []);
 
-  /* =========================
-     SLIDER BUTTONS
-     ========================= */
-  const nextSlide = () => {
-    window.scrollTo({
-      top: window.scrollY + 500,
-      behavior: "smooth",
-    });
-  };
-
-  const prevSlide = () => {
-    window.scrollTo({
-      top: window.scrollY - 500,
-      behavior: "smooth",
-    });
-  };
-
-  /* =========================
-     UI
-     ========================= */
   return (
-    <div className="work-section" id="work">
+    <div className="work-section" id="projects">
 
       <div className="work-container section-container">
 
         <h2>
-          My <span>Work</span>
+          My <span>Projects</span>
         </h2>
-
-        <div className="work-slider-controls">
-          <button className="slider-btn" onClick={prevSlide}>‹</button>
-          <button className="slider-btn" onClick={nextSlide}>›</button>
-        </div>
 
         <div className="work-flex" ref={flexRef}>
 
@@ -145,19 +115,35 @@ const Work = () => {
 
                   <div>
                     <h4>{project.title}</h4>
-                    <p>{project.category}</p>
+                    <p className="category">{project.category}</p>
                   </div>
 
                 </div>
 
-                <h4>Overview</h4>
-
+                <h4 className="overview-title">Overview</h4>
                 <p>{project.description}</p>
+
+                {/* 🔥 TECH STACK */}
+                <div className="tech-stack">
+                  {project.tech.map((tech, i) => (
+                    <span key={i}>{tech}</span>
+                  ))}
+                </div>
+
+                {/* 🔥 ACTION BUTTON */}
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-btn"
+                >
+                  View Project →
+                </a>
 
               </div>
 
               <WorkImage
-                image={project.image}
+                image={"/images/project1.webp"}
                 alt={project.title}
               />
 
