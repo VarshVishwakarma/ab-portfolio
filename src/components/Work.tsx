@@ -2,7 +2,7 @@ import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,28 +51,33 @@ const Work = () => {
     const track = trackRef.current;
     if (!section || !track) return;
 
-    const totalWidth = track.scrollWidth;
-    const viewportWidth = window.innerWidth;
+    const ctx = gsap.context(() => {
+      
+      const getScrollDistance = () =>
+        track.scrollWidth - window.innerWidth;
 
-    const scrollDistance = totalWidth - viewportWidth;
+      gsap.to(track, {
+        x: () => -getScrollDistance(), // 🔥 dynamic fix
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${getScrollDistance()}`, // 🔥 dynamic fix
+          scrub: true,
+          pin: true,
+          invalidateOnRefresh: true,
+        },
+      });
 
-    const animation = gsap.to(track, {
-      x: -scrollDistance,
-      ease: "none",
-      scrollTrigger: {
-        trigger: section,
-        start: "top top",
-        end: () => `+=${scrollDistance}`,
-        scrub: true,
-        pin: true,
-        invalidateOnRefresh: true,
-      },
-    });
+    }, section);
 
-    return () => {
-      animation.kill();
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
+    // 🔥 Fix layout timing issues
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 300);
+
+    return () => ctx.revert(); // ✅ safe cleanup
+
   }, []);
 
   return (
@@ -99,6 +104,7 @@ const Work = () => {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="project-link"
               >
                 View on GitHub →
               </a>
