@@ -1,145 +1,148 @@
 import "./styles/Work.css";
-import { useEffect, useRef } from "react";
+import WorkImage from "./WorkImage";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const Work = () => {
-  const flexRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
       title: "SyntexHub Encrypted Chat App",
-      description:
-        "Real-time encrypted chat application with secure communication protocols.",
+      category: "Cybersecurity",
+      description: "Real-time encrypted chat with secure communication.",
       tech: ["React", "Node.js", "WebSockets", "Encryption"],
       github: "https://github.com/Abhiimaurya0080/syntexhub_Encrypted_chat_app",
+      image: "/images/project1.webp",
     },
     {
-      title: "Encrypted File Transfer System",
-      description:
-        "Secure file transfer with encryption and protected storage mechanism.",
+      title: "Encrypted File Transfer",
+      category: "Security System",
+      description: "Secure file transfer with encryption & protected storage.",
       tech: ["Python", "Encryption", "File Handling"],
       github:
         "https://github.com/Abhiimaurya0080/Encrypted_file_transfer_-_secure_storage",
+      image: "/images/project2.webp",
     },
     {
       title: "Bug Bounty Toolkit",
-      description:
-        "Toolkit for vulnerability detection and ethical hacking automation.",
+      category: "Ethical Hacking",
+      description: "Toolkit for vulnerability detection & automation.",
       tech: ["Python", "Security Tools"],
       github: "https://github.com/Abhiimaurya0080/h4cker_bug-bounty",
+      image: "/images/project3.webp",
     },
     {
       title: "Port Scanner",
-      description:
-        "Network scanner to identify open ports and analyze vulnerabilities.",
+      category: "Networking",
+      description: "Detect open ports & analyze vulnerabilities.",
       tech: ["Python", "Sockets", "Networking"],
       github: "https://github.com/Abhiimaurya0080/Syntecxhub_port_scanner",
+      image: "/images/project4.webp",
     },
   ];
 
-  useEffect(() => {
-    const init = () => {
-      const gsap = (window as any).gsap;
-      const ScrollTrigger = (window as any).ScrollTrigger;
-      if (!gsap || !ScrollTrigger) return;
+  useGSAP(() => {
+    let translateX = 0;
 
-      gsap.registerPlugin(ScrollTrigger);
+    function setTranslateX() {
+      const box = document.getElementsByClassName("work-box");
 
-      const flex = flexRef.current;
-      if (!flex) return;
+      if (!box.length) return;
 
-      const totalWidth = flex.scrollWidth;
-      const viewport = window.innerWidth;
+      const rectLeft = document
+        .querySelector(".work-container")!
+        .getBoundingClientRect().left;
 
-      const scrollDistance = totalWidth - viewport;
+      const rect = box[0].getBoundingClientRect();
 
-      gsap.to(flex, {
-        x: -scrollDistance,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".work-section",
-          start: "top top",
-          end: `+=${scrollDistance}`,
-          scrub: true,
-          pin: true,
-        },
-      });
+      const parentWidth =
+        box[0].parentElement!.getBoundingClientRect().width;
 
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 200);
-    };
+      let padding =
+        parseInt(window.getComputedStyle(box[0]).padding) / 2;
 
-    if (!(window as any).gsap) {
-      const s = document.createElement("script");
-      s.src =
-        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
-      s.onload = () => {
-        const st = document.createElement("script");
-        st.src =
-          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
-        st.onload = init;
-        document.head.appendChild(st);
-      };
-      document.head.appendChild(s);
-    } else {
-      init();
+      translateX =
+        rect.width * box.length - (rectLeft + parentWidth) + padding;
+
+      if (translateX < 0) translateX = 0;
     }
+
+    setTranslateX();
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".work-section",
+        start: "top top",
+        end: `+=${translateX}`,
+        scrub: true,
+        pin: true,
+        id: "work",
+      },
+    });
+
+    timeline.to(".work-flex", {
+      x: -translateX,
+      ease: "none",
+    });
+
+    return () => {
+      timeline.kill();
+      ScrollTrigger.getById("work")?.kill();
+    };
   }, []);
 
   return (
     <div className="work-section" id="projects">
-      <style>{`
-        .work-section {
-          overflow: hidden;
-        }
-
-        .work-flex {
-          display: flex;
-          gap: 2rem;
-          width: max-content;
-        }
-
-        .work-box {
-          flex: 0 0 400px;
-          background: rgba(255,255,255,0.05);
-          border-radius: 12px;
-          padding: 20px;
-        }
-
-        .tech-stack {
-          color: #38bdf8;
-          font-size: 0.85rem;
-          margin-top: 6px;
-        }
-      `}</style>
-
       <div className="work-container section-container">
-        <h2>My <span>Projects</span></h2>
 
-        <div className="work-flex" ref={flexRef}>
-          {projects.map((project, i) => (
-            <div className="work-box" key={i}>
-              <h3>{project.title}</h3>
+        <h2>
+          My <span>Projects</span>
+        </h2>
 
-              <p className="tech-stack">
-                {project.tech.join(" • ")}
-              </p>
+        <div className="work-flex">
+          {projects.map((project, index) => (
+            <div className="work-box" key={index}>
 
-              <p style={{ marginTop: "10px" }}>
-                {project.description}
-              </p>
+              <div className="work-info">
 
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="project-link"
-              >
-                View on GitHub →
-              </a>
+                <div className="work-title">
+                  <h3>{String(index + 1).padStart(2, "0")}</h3>
+
+                  <div>
+                    <h4>{project.title}</h4>
+                    <p className="category">{project.category}</p>
+                  </div>
+                </div>
+
+                <h4>Overview</h4>
+                <p>{project.description}</p>
+
+                {/* 🔥 TECH STACK FIX */}
+                <div className="tech-stack">
+                  {project.tech.join(" • ")}
+                </div>
+
+                {/* 🔥 GITHUB LINK */}
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-link"
+                >
+                  View on GitHub →
+                </a>
+
+              </div>
+
+              <WorkImage image={project.image} alt={project.title} />
+
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
